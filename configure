@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# remove any older configuration files
+rm -f configuration && touch configuration
+
+# get the package name (i.e., name of this directory)
+echo PACKAGE=${PWD##*/} > configuration
+
+# create a file for setting local environment variables
+if [ ! -e bashrc.local ]; then touch bashrc.local; fi
+
+# create a file for setting local matlab variables
+if [ ! -e startup_local.m ]; then touch startup_local.m; fi
+
+# get matlab root
+if [ -n "$(which matlab)" ]; then	# -n tests to see if the argument is non empty
+matlab -nosplash -nodesktop -r "unix(['echo MATLABROOT=',matlabroot,'>> configuration']); exit"
+fi
+
