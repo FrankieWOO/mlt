@@ -1,0 +1,18 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  fn_basis_gaussian_rbf -> distances;
+  test_knn_2d_bin -> predict_knn;
+
+  fn_basis_gaussian_rbf [URL="./bases/fn_basis_gaussian_rbf.html"];
+  fn_basis_linear [URL="./bases/fn_basis_linear.html"];
+  f_rmstde [URL="./error/f_rmstde.html"];
+  fn_error_rmstde [URL="./error/fn_error_rmstde.html"];
+  get_nmse [URL="./error/get_nmse.html"];
+  distances [URL="./helpers/distances.html"];
+  predict_knn [URL="./knn/predict_knn.html"];
+  test_knn_2d_bin [URL="./knn/test_knn_2d_bin.html"];
+  predict_linear [URL="./predict/predict_linear.html"];
+  predict_local_linear [URL="./predict/predict_local_linear.html"];
+  fn_weight_gaussians [URL="./weights/fn_weight_gaussians.html"];
+  fn_weight_normalised_gaussians [URL="./weights/fn_weight_normalised_gaussians.html"];
+}

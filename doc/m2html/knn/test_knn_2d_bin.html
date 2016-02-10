@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_knn_2d_bin</title>
+  <meta name="keywords" content="test_knn_2d_bin">
+  <meta name="description" content="Script to demonstrate k-Nearest Neighbours on a 2D binary classification problem.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">knn</a> &gt; test_knn_2d_bin.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\knn&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>test_knn_2d_bin
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Script to demonstrate k-Nearest Neighbours on a 2D binary classification problem.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Script to demonstrate k-Nearest Neighbours on a 2D binary classification problem.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="predict_knn.html" class="code" title="function Y = knn(X,model)">predict_knn</a>	K-nearest neigbours.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Script to demonstrate k-Nearest Neighbours on a 2D binary classification problem.</span>
+0002 
+0003 clear all
+0004 rand(<span class="string">'seed'</span>,1);randn(<span class="string">'seed'</span>,1)
+0005 figNo=1;
+0006 
+0007 <span class="comment">% generative model</span>
+0008 fd= inline(<span class="string">'3*x(1,:)-1'</span>); <span class="comment">% decision boundry</span>
+0009 f = inline(<span class="string">'3*x(1,:)-x(2,:)-1&gt;0'</span>);
+0010 
+0011 <span class="comment">% generate data</span>
+0012 Ntr  = 101;
+0013 dimX = 2;
+0014 xmax = ones(dimX,1); xmin=zeros(dimX,1);
+0015 Xtr  = repmat(xmax-xmin,1,Ntr).*rand(dimX,Ntr)+repmat(xmin,1,Ntr);
+0016 Ytr  = f(Xtr + 0.1*randn(dimX,Ntr));
+0017 fprintf(1,<span class="string">'#Data: %5d, '</span>,Ntr);   
+0018 
+0019 <span class="comment">% set up regression model</span>
+0020 model.k  = 2;               <span class="comment">% no. neighbours to use</span>
+0021 model.X  = Xtr;             <span class="comment">% model points</span>
+0022 model.Y  = Ytr;             <span class="comment">% classes</span>
+0023 model.N  = Ntr;             <span class="comment">% no. of points</span>
+0024 model.l  = unique(model.Y); <span class="comment">% class labels</span>
+0025 model.Nl = length(model.l); <span class="comment">% no. class labels</span>
+0026 
+0027 <span class="comment">% predict training data</span>
+0028 Yptr = <a href="predict_knn.html" class="code" title="function Y = knn(X,model)">predict_knn</a>(Xtr,model);
+0029 
+0030 <span class="comment">% compute training error (percentage misclassified instances)</span>
+0031 i=find(Yptr~=Ytr); 
+0032 pcetr = 100*length(i)/Ntr;
+0033 fprintf(1,<span class="string">'%% error (train) = %5.3f%%, '</span>,pcetr);   
+0034 
+0035 <span class="comment">% predict test data</span>
+0036 Nte  = Ntr;
+0037 Xte  = repmat(xmax-xmin,1,Nte).*rand(dimX,Nte)+repmat(xmin,1,Nte);
+0038 Yte  = f(Xte);
+0039 Ypte = <a href="predict_knn.html" class="code" title="function Y = knn(X,model)">predict_knn</a>(Xte,model);
+0040 
+0041 <span class="comment">% compute test error (percentage misclassified instances)</span>
+0042 i=find(Ypte~=Yte); 
+0043 pcete = 100*length(i)/Nte;
+0044 fprintf(1,<span class="string">'%% error (test) = %5.3f, '</span>,pcete);   
+0045 fprintf(1,<span class="string">'\n'</span>);   
+0046 
+0047 <span class="comment">% visualisation</span>
+0048 figure(figNo),clf,hold on,grid on,box on
+0049 
+0050 <span class="comment">% visualise the generative model</span>
+0051 xd  =linspace(xmin(1),xmax(1),20); yd = fd(xd);
+0052 h(1)=plot(xd, yd,<span class="string">'k-'</span>); <span class="comment">% generative model</span>
+0053 
+0054 <span class="comment">% training data</span>
+0055 i = find(Ytr); j = setdiff(1:Ntr,i);
+0056 h(2)=plot(Xtr(1,i),Xtr(2,i),<span class="string">'r.'</span>);
+0057 h(3)=plot(Xtr(1,j),Xtr(2,j),<span class="string">'b.'</span>);
+0058 
+0059 <span class="comment">% training data predictions</span>
+0060 i = find(Yptr); j = setdiff(1:Ntr,i);
+0061 h(4)=plot(Xtr(1,i),Xtr(2,i),<span class="string">'ro'</span>);
+0062 h(5)=plot(Xtr(1,j),Xtr(2,j),<span class="string">'bo'</span>);
+0063 
+0064 <span class="comment">% test data</span>
+0065 i = find(Yte); j = setdiff(1:Nte,i);
+0066 h(6)=plot(Xte(1,i),Xte(2,i),<span class="string">'rx'</span>);
+0067 h(7)=plot(Xte(1,j),Xte(2,j),<span class="string">'bx'</span>);
+0068 
+0069 <span class="comment">% test data predictions</span>
+0070 i = find(Ypte); j = setdiff(1:Nte,i);
+0071 h(8)=plot(Xte(1,i),Xte(2,i),<span class="string">'ro'</span>);
+0072 h(9)=plot(Xte(1,j),Xte(2,j),<span class="string">'bo'</span>);
+0073 
+0074 axis equal
+0075 xlim([xmin(1),xmax(1)])
+0076 ylim([xmin(2),xmax(2)])</pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:34:18 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

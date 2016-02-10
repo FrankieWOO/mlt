@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  test_knn_2d_bin -> predict_knn;
+
+  predict_knn [URL="predict_knn.html"];
+  test_knn_2d_bin [URL="test_knn_2d_bin.html"];
+}

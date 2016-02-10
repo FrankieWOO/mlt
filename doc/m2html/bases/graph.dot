@@ -1,0 +1,6 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  fn_basis_gaussian_rbf [URL="fn_basis_gaussian_rbf.html"];
+  fn_basis_linear [URL="fn_basis_linear.html"];
+}

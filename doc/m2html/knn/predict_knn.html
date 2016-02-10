@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of predict_knn</title>
+  <meta name="keywords" content="predict_knn">
+  <meta name="description" content="K-nearest neigbours.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">knn</a> &gt; predict_knn.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .\knn&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>predict_knn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>K-nearest neigbours.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function Y = knn(X,model) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> K-nearest neigbours.
+
+ in:
+     X        - input data
+     model    - model struct, containing
+          .k  - no. neighbours to use
+          .X  - model input samples
+          .Y  - model output samples
+          .N  - no. of model samples
+          .l  - class labels
+          .Nl - no. class labels
+ out:</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="test_knn_2d_bin.html" class="code" title="">test_knn_2d_bin</a>	Script to demonstrate k-Nearest Neighbours on a 2D binary classification problem.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% K-nearest neigbours.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% in:</span>
+0004 <span class="comment">%     X        - input data</span>
+0005 <span class="comment">%     model    - model struct, containing</span>
+0006 <span class="comment">%          .k  - no. neighbours to use</span>
+0007 <span class="comment">%          .X  - model input samples</span>
+0008 <span class="comment">%          .Y  - model output samples</span>
+0009 <span class="comment">%          .N  - no. of model samples</span>
+0010 <span class="comment">%          .l  - class labels</span>
+0011 <span class="comment">%          .Nl - no. class labels</span>
+0012 <span class="comment">% out:</span>
+0013 <span class="comment">%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function Y = knn(X,model)</a>
+0015 
+0016 N = size(X,2);
+0017 
+0018 <span class="comment">% squared distances</span>
+0019 D2  = repmat(sum(model.X'.^2,2),1,N)+<span class="keyword">...</span>
+0020       repmat(sum(X'.^2,2)',model.N,1)-2*model.X'*X;
+0021 
+0022 <span class="keyword">if</span> model.k==1 <span class="comment">% if just 1 NN, then find the min of D</span>
+0023     [d,i] = min(D2); Y=model.Y(i);
+0024 <span class="keyword">else</span> <span class="comment">% otherwise sort the distances, find the majority class label</span>
+0025     [d si] = sort(D2);
+0026     Y = nan(1,N); <span class="comment">% initialise N</span>
+0027     <span class="keyword">for</span> i=1:N <span class="comment">% for each data point</span>
+0028         n = zeros(1,model.Nl); <span class="comment">%</span>
+0029         <span class="keyword">for</span> j=1:model.Nl <span class="comment">% for each class label</span>
+0030             <span class="comment">% count the no. of points with this label</span>
+0031             im=find(model.Y(si(1:model.k,i))==model.l(j));
+0032             <span class="keyword">if</span> ~isempty(im)
+0033                 n(j) = size(im,2);
+0034             <span class="keyword">end</span>
+0035         <span class="keyword">end</span>
+0036         [d li] = max(n);
+0037         Y(i) = model.l(li);
+0038     <span class="keyword">end</span>
+0039 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Feb-2016 17:34:18 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
